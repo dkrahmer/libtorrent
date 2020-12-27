@@ -4,6 +4,7 @@
 #include <cppunit/extensions/HelperMacros.h>
 
 #include "helpers/mock_function.h"
+#include "helpers/mock_redirect.h"
 
 class test_fixture : public CppUnit::TestFixture {
 public:

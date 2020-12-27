@@ -101,6 +101,10 @@ class Tracker;
 class TrackerList;
 class TransferList;
 
+// TODO: Replace autoconf check and all uses of this macro.
+//#define LIBTORRENT_NO_EXPORT [[gnu::visibility("hidden")]]
+//#define LIBTORRENT_EXPORT [[gnu::visibility("default")]]
+
 // This should only need to be set when compiling libtorrent.
 #ifdef SUPPORT_ATTRIBUTE_VISIBILITY
   #define LIBTORRENT_NO_EXPORT __attribute__ ((visibility("hidden")))
@@ -109,6 +113,7 @@ class TransferList;
   #define LIBTORRENT_NO_EXPORT
   #define LIBTORRENT_EXPORT
 #endif
+
 
 }
 

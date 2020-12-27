@@ -7,6 +7,7 @@ class test_socket_address : public CppUnit::TestFixture {
   CPPUNIT_TEST(test_sa_is_broadcast);
 
   CPPUNIT_TEST(test_make);
+  CPPUNIT_TEST(test_make_addr);
 
   CPPUNIT_TEST(test_sin_from_sa);
   CPPUNIT_TEST(test_sin6_from_sa);
@@ -29,6 +30,7 @@ public:
   void test_sa_is_broadcast();
 
   void test_make();
+  void test_make_addr();
 
   void test_sin_from_sa();
   void test_sin6_from_sa();

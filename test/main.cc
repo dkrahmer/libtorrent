@@ -74,7 +74,7 @@ int main(int argc, char* argv[]) {
   controller.addListener( &progress );
 
   CppUnit::TextUi::TestRunner runner;
-  add_tests(runner, std::getenv("TEST_NAME"));
+  add_tests(runner, std::getenv("TEST_NAMES"));
 
   try {
     std::cout << "Running ";

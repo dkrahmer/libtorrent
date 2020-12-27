@@ -34,6 +34,9 @@ sa_unique_ptr   sa_make_inet() LIBTORRENT_EXPORT;
 sa_unique_ptr   sa_make_inet6() LIBTORRENT_EXPORT;
 sa_unique_ptr   sa_make_unix(const std::string& pathname) LIBTORRENT_EXPORT;
 
+sa_unique_ptr   sa_make_in_addr_t(in_addr_t addr) LIBTORRENT_EXPORT;
+sa_unique_ptr   sa_make_in6_addr(in6_addr addr) LIBTORRENT_EXPORT;
+
 sa_unique_ptr   sa_convert(const sockaddr* sa) LIBTORRENT_EXPORT;
 
 sa_unique_ptr   sa_copy(const sockaddr* sa) LIBTORRENT_EXPORT;

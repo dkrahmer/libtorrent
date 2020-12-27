@@ -145,4 +145,9 @@ Manager::receive_tick() {
   priority_queue_insert(&taskScheduler, &m_taskTick, (cachedTime + rak::timer::from_seconds(30)).round_seconds());
 }
 
+void
+Manager::main_thread_events() {
+  connection_manager()->async_resolver()->flush();
+}
+
 }

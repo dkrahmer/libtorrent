@@ -133,22 +133,26 @@ sa_length(const sockaddr* sa) {
 
 sa_unique_ptr
 sa_make_unspec() {
-  sa_unique_ptr sa(new sockaddr);
-
-  std::memset(sa.get(), 0, sizeof(sa));
-  sa.get()->sa_family = AF_UNSPEC;
-
-  return sa;
+  sockaddr* sa = new sockaddr;
+  std::memset(sa, 0, sizeof(sockaddr));
+  sa->sa_family = AF_UNSPEC;
+  return sa_unique_ptr(sa);
 }
 
 sa_unique_ptr
 sa_make_inet() {
-  return sa_unique_ptr(reinterpret_cast<sockaddr*>(sin_make().release()));
+  sockaddr_in* sin = new sockaddr_in;
+  std::memset(sin, 0, sizeof(sockaddr_in));
+  sin->sin_family = AF_INET;
+  return sa_unique_ptr(reinterpret_cast<sockaddr*>(sin));
 }
 
 sa_unique_ptr
 sa_make_inet6() {
-  return sa_unique_ptr(reinterpret_cast<sockaddr*>(sin6_make().release()));
+  sockaddr_in6* sin6 = new sockaddr_in6;
+  std::memset(sin6, 0, sizeof(sockaddr_in6));
+  sin6->sin6_family = AF_INET6;
+  return sa_unique_ptr(reinterpret_cast<sockaddr*>(sin6));
 }
 
 sa_unique_ptr
@@ -156,13 +160,29 @@ sa_make_unix(const std::string& pathname) {
   if (!pathname.empty())
     throw internal_error("torrent::sa_make_unix: function not implemented");
 
-  sun_unique_ptr sunp(new sockaddr_un);
-
-  std::memset(sunp.get(), 0, sizeof(sockaddr_un));
+  sockaddr_un* sunp = new sockaddr_un;
+  std::memset(sunp, 0, sizeof(sockaddr_un));
   sunp->sun_family = AF_UNIX;
   // TODO: verify length, copy pathname
+  return sa_unique_ptr(reinterpret_cast<sockaddr*>(sunp));
+}
 
-  return sa_unique_ptr(reinterpret_cast<sockaddr*>(sunp.release()));
+sa_unique_ptr
+sa_make_in_addr_t(in_addr_t addr) {
+  sockaddr_in* sin = new sockaddr_in;
+  std::memset(sin, 0, sizeof(sockaddr_in));
+  sin->sin_family = AF_INET;
+  sin->sin_addr.s_addr = addr;
+  return sa_unique_ptr(reinterpret_cast<sockaddr*>(sin));
+}
+
+sa_unique_ptr
+sa_make_in6_addr(in6_addr addr) {
+  sockaddr_in6* sin6 = new sockaddr_in6;
+  std::memset(sin6, 0, sizeof(sockaddr_in6));
+  sin6->sin6_family = AF_INET6;
+  sin6->sin6_addr = addr;
+  return sa_unique_ptr(reinterpret_cast<sockaddr*>(sin6));
 }
 
 sa_unique_ptr

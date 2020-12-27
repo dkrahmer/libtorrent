@@ -5,6 +5,7 @@
 #include <string>
 #include <cppunit/extensions/HelperMacros.h>
 
+#include "torrent/utils/log.h"
 #include "torrent/net/address_info.h"
 
 //
@@ -107,8 +108,19 @@ compare_listen_result(const torrent::listen_result_type& lhs, int rhs_fd, const 
 }
 
 inline torrent::sa_unique_ptr
+wrap_ai__get_first_sa(const char* nodename, const char* servname, const addrinfo* hints) {
+  addrinfo* ai;
+  int err = ::getaddrinfo(nodename, servname, hints, &ai);
+
+  if (err != 0)
+    return nullptr;
+
+  return torrent::sa_copy(ai->ai_addr);
+}
+
+inline torrent::sa_unique_ptr
 wrap_ai_get_first_sa(const char* nodename, const char* servname = nullptr, const addrinfo* hints = nullptr) {
-  auto sa = torrent::ai_get_first_sa(nodename, servname, hints);
+  auto sa = wrap_ai__get_first_sa(nodename, servname, hints);
 
   CPPUNIT_ASSERT_MESSAGE(("wrap_ai_get_first_sa: nodename:'" + std::string(nodename) + "'").c_str(),
                         sa != nullptr);
@@ -117,7 +129,7 @@ wrap_ai_get_first_sa(const char* nodename, const char* servname = nullptr, const
 
 inline torrent::c_sa_unique_ptr
 wrap_ai_get_first_c_sa(const char* nodename, const char* servname = nullptr, const addrinfo* hints = nullptr) {
-  auto sa = torrent::ai_get_first_sa(nodename, servname, hints);
+  auto sa = wrap_ai__get_first_sa(nodename, servname, hints);
 
   CPPUNIT_ASSERT_MESSAGE(("wrap_ai_get_first_sa: nodename:'" + std::string(nodename) + "'").c_str(),
                         sa != nullptr);
@@ -147,7 +159,7 @@ test_valid_ai_ref(test_ai_ref ftor, uint16_t port = 0) {
   torrent::ai_unique_ptr ai;
 
   if (int err = ftor(ai)) {
-    std::cout << std::endl << "valid_ai_ref got error '" << gai_strerror(err) << "'" << std::endl;
+    lt_log_print(torrent::LOG_MOCK_CALLS, "valid_ai_ref got error '%s'", gai_strerror(err));
     return false;
   }
 
@@ -172,7 +184,7 @@ test_valid_ai_ref_err(test_ai_ref ftor, int expect_err) {
   int err = ftor(ai);
 
   if (err != expect_err) {
-    std::cout << std::endl << "ai_ref_err got wrong error, expected '" << gai_strerror(expect_err) << "', got '" << gai_strerror(err) << "'" << std::endl;
+    lt_log_print(torrent::LOG_MOCK_CALLS, "ai_ref_err got wrong error, expected '%s', got '%s'", gai_strerror(expect_err), gai_strerror(err));
     return false;
   }
 

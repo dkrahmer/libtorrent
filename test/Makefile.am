@@ -28,6 +28,7 @@ LibTorrent_Test_Common = \
 	helpers/mock_compare.h \
 	helpers/mock_function.cc \
 	helpers/mock_function.h \
+	helpers/mock_redirect.h \
 	helpers/network.h \
 	helpers/progress_listener.cc \
 	helpers/progress_listener.h \
@@ -96,6 +97,8 @@ LibTorrent_Test_Data_SOURCES = $(LibTorrent_Test_Common) \
 	data/test_hash_queue.h
 
 LibTorrent_Test_Net_SOURCES = $(LibTorrent_Test_Common) \
+	net/test_resolver_udns.cc \
+	net/test_resolver_udns.h \
 	net/test_socket_listen.cc \
 	net/test_socket_listen.h
 

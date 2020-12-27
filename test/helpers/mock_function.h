@@ -97,13 +97,6 @@ mock_expect(void fn(Args...), Args... args) {
 }
 
 template<typename R, typename... Args>
-void
-mock_redirect(R fn(Args...), std::function<R (Args...)> func) {
-  typedef mock_function_map<R, Args...> mock_map;
-  mock_map::redirects[reinterpret_cast<void*>(fn)] = func;
-}
-
-template<typename R, typename... Args>
 auto
 mock_call_direct(std::string name, R fn(Args...), Args... args) -> decltype(fn(args...)) {
   typedef mock_function_type<R, Args...> mock_type;
